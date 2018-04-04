@@ -1,6 +1,4 @@
 <%@ page import="java.sql.DriverManager" %>
-<%@ page import="com.project.ApplicationsDAO"  %>
-<%@ page import="com.project.Application"  %>
 <%@ page import="com.project.Login"  %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.sql.Connection" %>
