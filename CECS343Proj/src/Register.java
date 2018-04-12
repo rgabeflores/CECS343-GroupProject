@@ -21,13 +21,11 @@ public class Register {
 	 */
 	public boolean validateUserName(String username) {
 		Connection c = getConnection();
-		try {
-					
+		try {		
 			PreparedStatement ptsmt = (PreparedStatement) c.prepareStatement("SELECT from user where userName = ?");
 			ptsmt.setString(1,username);
 			ResultSet result = ptsmt.executeQuery();
-			
-	
+		
 			if(result.isBeforeFirst()) {
 				System.out.println("SMH SMH");
 				return false;
@@ -36,8 +34,6 @@ public class Register {
 				System.out.println("SMH2 SMH2");
 				return true;
 			}
-			
-			
 		}
 		//Catches if the SQL query fails (result of the query is null or 0) e.g. the username is not in the database
 		catch(SQLException e) {
@@ -51,10 +47,7 @@ public class Register {
 		}
 		System.out.println("SMH4 SMH4");
 		return false;
-	
 	}
-	
-	
 	
 	/*
 	 * This method validates if the format of the entered email address actually matches the criteria
@@ -111,8 +104,7 @@ public class Register {
 					}
 					else {
 						domain.append(emailAddress.charAt(j));
-					}
-					
+					}	
 				}
 			}
 			//if the email address domain is empty or there isn't an at sign, then it is invalid
@@ -129,13 +121,7 @@ public class Register {
 			ex.printStackTrace();
 		}
 		return false;
-	
 	}
-	
-//	public boolean validateEmailAddress2() {
-//		
-//	}
-	
 	
 	/*
 	 *This method determines whether a user's password is strong (at least 1 character should be uppercase
