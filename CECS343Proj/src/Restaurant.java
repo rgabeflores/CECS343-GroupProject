@@ -95,7 +95,10 @@ public class Restaurant {
 		return restaurantAddress + " " + restaurantType;
 	}
 	
-	//This method 
+	/**
+	 * This method calculates the average rating of the restaurant based off user ratings
+	 * @return average
+	 */ 
 	public double calculateAverageRating() {
 		int summation=0;
 		for(Review r : restaurantReviewList) {
@@ -105,32 +108,6 @@ public class Restaurant {
 		return average;
 		
 	}
-	
-	public double calcAverageRating() {
-		Connection c = getConnection();
-		try {	
-			PreparedStatement statement = (PreparedStatement) c.prepareStatement("SELECT AVG(starsGiven) from restaurant INNER JOIN review on restaurant.restaurantID = review.restaurantID where restaurantID = ?");
-			statement.setInt(1, this.restaurantID);
-			ResultSet rs = statement.executeQuery();
-			if(rs==null) {
-				
-			}
-			else {
-				while(rs.next()) {
-					double avg = 
-				}
-				
-			}
-		
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
-	
-	
 //	
 //	public void viewRestaurantHours() {
 //		hoursOfOperation.viewBusinessHours();
