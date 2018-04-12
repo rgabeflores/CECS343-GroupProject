@@ -10,11 +10,20 @@ public class Restaurant {
 	private String restaurantAddress;
 	private String restaurantType;
 	private ArrayList<Review> restaurantReviewList;
-//	private BusinessInfo hoursOfOperation;
+	private BusinessInfo hoursOfOpen;
 	
-	
+	//Default constructor
 	public Restaurant() {
 		
+	}
+	//Overloaded constructor with one parameter : restaurantName
+	public Restaurant(String restName) {
+		restaurantName = restName;
+	}
+	//Overloaded constructor with two parameters : restaurantName and restaurantID
+	public Restaurant(String restName, int id) {
+		restaurantName = restName;
+		restaurantID = id;
 	}
 	
 	/**
