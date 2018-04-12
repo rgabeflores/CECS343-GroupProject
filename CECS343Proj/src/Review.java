@@ -11,29 +11,35 @@ import com.mysql.jdbc.PreparedStatement;
 public class Review {
 	
 	private int reviewNumber;
-	private int starsGiven;
-	private String comment;
-	private HashMap<String, Boolean> likesDislikes;
+	private int starsGiven; //the rating number between 1-5 given by the author of the review
+	private String comment; //the actual content of the review
+	private HashMap<String, Boolean> likesDislikes; //keeps track of who liked and disliked the review
 	
 	
-	//Default constructor for a review object
-	public Review() {
+	//Overloaded constructor for a review object, used when retrieving reviews of restaurants from database
+	public Review(int restaurID, int reviewNum) {
 		likesDislikes = new HashMap<String, Boolean>();
 		try {
 			Connection c = getConnection();
-			PreparedStatement statement = (PreparedStatement) c.prepareStatement("select thumbedBy, likeOrDislike from review_stats where restaurantID = ? AND reviewNumber = ?");
-			statement.setInt(1,2);
-			statement.setInt(2,  3);
+			PreparedStatement statement = (PreparedStatement) c.prepareStatement("select * from review_stats inner join review on review_stats.restaurantID = review.restaurantID AND review_stats.reviewNumber = review.reviewNumber"
+					+ "															where review_stats.restaurantID = ? AND review_stats.reviewNumber = ?");
+			statement.setInt(1,restaurID);
+			statement.setInt(2,revNum);
 			ResultSet rs = statement.executeQuery();
+			//retrieves review stats such as likes and dislikes
 			while(rs.next()) {
 				String firstEntry = rs.getString("thumbedBy");
 				boolean secondEntry = rs.getBoolean("likeOrDislike");
 				likesDislikes.put(firstEntry,secondEntry );
+				reviewNumber = revNum;
+				starsGiven = rs.getInt("starRating");
+				comment = rs.getString("reviewContent");
 			}
+			
 			
 		}
 		catch(Exception e) {
-			
+			e.printStackTrace();
 		}
 		
 	}
@@ -69,6 +75,7 @@ public class Review {
 			statement.setInt(2, this.getReviewNumber());
 			statement.setString(3, u.getUsername());
 			statement.setBoolean(4,decision);
+			statement.executeUpdate();
 			
 			
 		}catch(Exception e) {
@@ -85,8 +92,11 @@ public class Review {
 			Connection c = getConnection();
 			PreparedStatement statement = (PreparedStatement) c.prepareStatement("SELECT * from review_stats where restaurantID = ? AND reviewNumber = ? AND thumbedBy = ?");
 		    statement.setInt(1, r.getRestaurantID());
-			statement.setString(2,);
+			statement.setString(2,this.reviewNumber);
 			statement.setString(3, u.getUsername());
+			
+			//remove the user from the likesDislikes hashmap
+			likesDislikes.remove(userName);
 			
 			ResultSet rs = statement.executeQuery();
 			//if the result set is empty, this implies user has never left a like or dislike for a review, so return false
@@ -97,7 +107,7 @@ public class Review {
 			else {
 				PreparedStatement statement2 = (PreparedStatement) c.prepareStatement("delete from review_stats where restaurantID = ? AND reviewNumber = ? AND thumbedBy = ?");
 				statement2.setInt(1,r.getRestaurantID());
-				statement2.setInt(2,2 );
+				statement2.setInt(2,this.reviewNumber);
 				statement2.setString(3, u.getUsername());
 				statement2.executeUpdate();
 			}
@@ -105,6 +115,8 @@ public class Review {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+		return true;
 		
 	}
 	
