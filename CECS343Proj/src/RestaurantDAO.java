@@ -62,6 +62,50 @@ public class RestaurantDAO {
 		return null;
 	}
 	
+	/**
+	 * This method retrieves the restaurant's additional business information including hours of operation,etc
+	 * @return
+	 */
+	public BusinessInfo retrieveRestaurantInfo(int restaurantID) {
+		Connection conn = getConnection();
+		try {
+			PreparedStatement ptsmt = (PreparedStatement) conn.prepareStatement("SELECT * from restaurant_hours where restaurantID = ?");
+			ptsmt.setInt(1, restaurantID);
+			ResultSet rs = ptsmt.executeQuery();
+			
+			ArrayList<String> dailyHours = new ArrayList<String>();
+			
+			while(rs.next()) {
+				String sundayHours = rs.getString("Sunday");
+				String mondayHours = rs.getString("Monday");
+				String tuesdayHours = rs.getString("Tuesday");
+				String wednesdayHours = rs.getString("Wednesday");
+				String thursdayHours = rs.getString("Thursday");
+				String fridayHours = rs.getString("Friday");
+				String saturdayHours = rs.getString("Saturday");
+				
+				dailyHours.add(sundayHours);
+				dailyHours.add(mondayHours);
+				dailyHours.add(tuesdayHours);
+				dailyHours.add(wednesdayHours);
+				dailyHours.add(thursdayHours);
+				dailyHours.add(fridayHours);
+				dailyHours.add(saturdayHours);
+				
+				BusinessInfo busInfo = new BusinessInfo();
+				busInfo.addBusinessInfo(dailyHours);
+				busInfo.showBusinessHours();
+				
+				return busInfo;	
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 	public Review<> retrieveReviewHistory(){
 		
 	}
