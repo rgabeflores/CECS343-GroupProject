@@ -14,41 +14,20 @@
 </head>
 <body>
 
-
 <%
-	Login log = new Login();
-	String action = request.getParameter("action");
-	String username = request.getParameter("username");
-	String password = request.getParameter("password");
-	
-	
-	if(action!=null && action.equals("login")){
-		String[] loginInfo = log.ensureLoginSuccess(username, password);
-		if(loginInfo!=null & loginInfo[0] !=null && loginInfo[1] !=null){
-			out.print("SUCCESS");
-			response.sendRedirect("hello.jsp");
-		}
-		else{
-			out.print("Incorrect login information, type in username and password again");
-			
-		}
-	}
-
-	else{
-		out.print("Enter username and password to login");
-	}
-
 %>
 
-<form action = "login.jsp">
+<form action = "Login" method = "get"> 
+	<div style="color:red">${errorMessage}</div>
 	<table class = "table">
-		<tr>
-			<p> Username <input name = "username" class = "form-control"></p>
-			<p> Password <input name = "password" class = "form-control"></p>
-			<p> <button class = "btn-sn" name = "action" value="login"></button>
-		</tr>
 	
-
+		<tr>
+			<p> Username <input name = "username" type ="text"></p>
+			<p> Password <input name = "password" type = "text"></p>
+			<p> <input type = "submit" value = 'Submit'> </p>
+		</tr>
+	</table>
+</form>
 
 </body>
 </html>
