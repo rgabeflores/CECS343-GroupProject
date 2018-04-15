@@ -26,7 +26,6 @@ public class Login extends HttpServlet{
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		
-		
 		//checking and validating login credentials
 		String[] loginInfo = this.ensureLoginSuccess(username, password);
 		//redirect to home page, if login is successful
