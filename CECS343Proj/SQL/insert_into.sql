@@ -1,13 +1,12 @@
-insert into review_stats(restaurantID, reviewNumber, thumbedBy, likeOrDislike)
-	VALUES(1,1, 'daBestFeeder', TRUE),
-	      (1,1, 'mtomeh', TRUE);
 
-insert into review(userName, restaurantID, reviewNumber, reviewContent, starRating)
-	VALUES('mtomeh', '1', '1', 'This place is the best and amazing place I have dined at', '4'),
-	      ('mtomeh', '1', '2', 'This place is the best and amazing place I have dined at', '3');
-
-)
-
+insert into user(userName, password, emailAddress)
+	values('mtomeh', 'sweetum123', 'mtomeh@att.net'),
+	      ('daBestFeeder', 'mdsfdsnR8', 'darthblue27@gmail.com'),
+	      ('ilovelucy', 'ilovelucy456', 'lucy@hotmail.com'),
+	      ('shawnSpencer', 'pine@PPlE$', 's.spencer@yahoo.com'),
+	      ('AdrianMonk', '420cleanAll', 'adrianm@gmail.com');
+	      
+	  
 insert into restaurant(restaurantID, restaurantName, restaurantAddress, restaurantType)
 	  values(1, 'Nomad Bistro', '2nd Street Long Beach, CA', 'Chinese Restaurant' ),
 	        (2, 'Hatem Cuisine', 'Brookhurst Street Anaheim, CA', 'Persian Restaurant'),
@@ -18,13 +17,15 @@ insert into restaurant(restaurantID, restaurantName, restaurantAddress, restaura
 
 		(7, "Nugget Grill and Pub", "7th Street Long Beach, CA","Restaurant/Pub");
 
-insert into user(userName, password, emailAddress)
-	values('mtomeh', 'sweetum123', 'mtomeh@att.net'),
-	      ('daBestFeeder', 'mdsfdsnR8', 'darthblue27@gmail.com'),
-	      ('ilovelucy', 'ilovelucy456', 'lucy@hotmail.com'),
-	      ('shawnSpencer', 'pine@PPlE$', 's.spencer@yahoo.com'),
-	      ('AdrianMonk', '420cleanAll', 'adrianm@gmail.com');
-		 
+insert into review(userName, restaurantID, reviewNumber, reviewContent, starRating)
+	VALUES('mtomeh', '1', '1', 'This place is the best and amazing place I have dined at', '4'),
+	      ('mtomeh', '1', '2', 'This place is the best and amazing place I have dined at', '3');
+
+
+insert into review_stats(restaurantID, reviewNumber, thumbedBy, likeOrDislike)
+	VALUES(1,1, 'daBestFeeder', TRUE),
+	      (1,1, 'mtomeh', TRUE);
+
 
 insert into restaurant_hours(restaurantID, Sunday, Monday, Tuesday, Wednesday,  Thursday, Friday, Saturday)
     values(1, "11:30 AM - 9:30 PM", "11:30 AM - 9:30 PM", "11:30 AM - 9:30 PM", "11:30 AM - 9:30 PM", "11:30 AM - 9:30 PM", "11:30 AM - 9:30 PM", "11:30 AM - 9:30 PM"),
