@@ -1,19 +1,49 @@
 package com.project;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.io.*;
 import java.sql.*;
-
+import javax.servlet.*;
+import javax.servlet.http.*;
 import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
 
 
-public class Login {
-	
+public class Login extends HttpServlet{
+	/**
+	 * Default constructor for the Login servlet object
+	 */
 	public Login() {
-		
+		super();
 
+	}
+	
+	/**
+	 * This method processes entered login information, and determines login validation
+	 */
+	public void doGet(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException{
+		String username = ((ServletRequest) request).getParameter("username").toString();
+		String password = ((ServletRequest) request).getParameter("password").toString();
+		
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		
+		
+		//checking and validating login credentials
+		String[] loginInfo = this.ensureLoginSuccess(username, password);
+		//redirect to home page, if login is successful
+		if(loginInfo!=null & loginInfo[0] !=null && loginInfo[1] !=null){
+			response.sendRedirect("hello.jsp");
+		}
+		//else, redirect back to login page and notify end user of invalid username/password combination
+		else{
+			request.setAttribute("errorMessage","Invalid Username/password");
+			RequestDispatcher disp  = request.getRequestDispatcher("/login.jsp");
+			disp.forward(request, response);
+		}
+	}		
+	
+	protected void doPost(HttpServlet request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
 	}
 	
 	/*
