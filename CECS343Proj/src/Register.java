@@ -22,7 +22,7 @@ public class Register {
 	public boolean validateUserName(String username) {
 		Connection c = getConnection();
 		try {		
-			PreparedStatement ptsmt = (PreparedStatement) c.prepareStatement("SELECT from user where userName = ?");
+			PreparedStatement ptsmt = (PreparedStatement) c.prepareStatement("SELECT userName from user where userName = ?");
 			ptsmt.setString(1,username);
 			ResultSet result = ptsmt.executeQuery();
 		
