@@ -1,17 +1,64 @@
 package com.project;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import java.sql.*;
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import com.mysql.jdbc.PreparedStatement;
 
-public class Register {
+public class Register extends HttpServlet {
 	/*
 	 * Default constructor for a Register object
 	 */
 	public Register() {
+		super();
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException{
+		
+	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException{
+		String username = ((ServletRequest) request).getParameter("username").toString();
+		String password = ((ServletRequest) request).getParameter("password").toString();
+		String emailAddress = ((ServletRequest) request).getParameter("emailAddress").toString();
+		
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		
+		boolean userSuccess = this.validateUserName(username);
+		boolean passwordSuccess = this.validatePasswordStrength(password);
+		boolean emailSuccess = this.validateEmailAddress(emailAddress);
+		
+		//if username entry was successful, proceed to validating password 
+		if(userSuccess){
+			//if password entry was successfull, proceed validating email address
+			if(passwordSuccess){
+				//if email address entry was successful, create the account and it to the database
+				if(emailSuccess){
+					out.print("Account has been successfully made");
+					UserDAO ud = new UserDAO();
+					ud.insertNewUser(username, password, emailAddress);
+					response.sendRedirect("hello.jsp");
+				}
+				//else, email address entered is taken or is in an incorrect format
+				else{
+					request.setAttribute("errorMessage", "The entered email address is either taken or was entered in an incorrect email address format");					
+				}
+			}
+			//else, entered password isn't long enough or it didnt contain an uppercase letter
+			else{
+				request.setAttribute("errorMessage", "Password needs to be at least 6 characters long with at least 1 uppercase letter");
+			}
+		}
+		//else, entered username already exists in the database
+		else {
+			request.setAttribute("errorMessage", "Entered user name already exists, enter another username");
+		}
+		if(!userSuccess || !passwordSuccess || !emailSuccess) {
+			RequestDispatcher disp  = request.getRequestDispatcher("/register.jsp");
+			disp.forward(request, response);
+		}
 		
 	}
 	
@@ -21,31 +68,24 @@ public class Register {
 	 */
 	public boolean validateUserName(String username) {
 		Connection c = getConnection();
-		try {		
+		
+		try {
 			PreparedStatement ptsmt = (PreparedStatement) c.prepareStatement("SELECT userName from user where userName = ?");
 			ptsmt.setString(1,username);
 			ResultSet result = ptsmt.executeQuery();
-		
-			if(result.isBeforeFirst()) {
-				System.out.println("SMH SMH");
-				return false;
-			}
-			else {
-				System.out.println("SMH2 SMH2");
+			
+			//if the result set is empty, then username isn't taken, so return true
+			if(result.next()==false) {
 				return true;
 			}
+			//else, return false since username is taken
+			else {
+				return false;
+			}
 		}
-		//Catches if the SQL query fails (result of the query is null or 0) e.g. the username is not in the database
-		catch(SQLException e) {
-			System.out.println("SMH3 SMH3");
-			e.printStackTrace();
-			return true;
-		}
-		
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("SMH4 SMH4");
 		return false;
 	}
 	
