@@ -18,54 +18,18 @@
 	
 	
 <%
-	Register r = new Register();
-	
-	String action = request.getParameter("action");
-	
-	String username = request.getParameter("username");
-	String password = request.getParameter("password");
-	String emailAddress = request.getParameter("emailAddr");
-	
-	
+
 %>
 
-<%
-	boolean passSuccess=r.validatePasswordStrength(password);
-	boolean userSuccess=r.validateUserName(username);
-	boolean emailSuccess = r.validateEmailAddress(emailAddress);
-	//if the button was pressed then success
-	if(action != null && action.equals("createAccount")){
-		out.print("GOOD for now");
-		if(userSuccess){
-			if(passSuccess){
-				if(emailSuccess){
-					out.print("Account has been successfully made");
-					UserDAO ud = new UserDAO();
-					ud.insertNewUser(username, password, emailAddress);
-				}
-				else{
-					out.print("Email address is already taken");
-				}
-			}
-			else{
-				out.print("Password is weak, enter a stronger password");
-			}
-		}
-		
-	}
-
-%>	
-	<form action = "register.jsp">
+<form action = "Register" method = "get">
+	<div style="color:red">${errorMessage}</div>
 	<table>
-		<p> Username <input name = "username" class = "form-control"></p>
-		<p> Password <input name = "password" class = "form-control"></p>
-		<p> Email Address <input name = "emailAddr" class = "form-control"></p>
-		<p> Press to make new account <button class = "btn-sm" name = "action" value = "createAccount"></button>
+		<p> Username <input name = "username" type = "text"></p>
+		<p> Password <input name = "password" type = "text"></p>
+		<p> Email Address <input name = "emailAddress" type = "text"></p>
+		<p> Press to make new account <input type = "submit" value = 'Submit'> </p>
 	</table>
-	
-	
-	
-
+</form>
 
 </body>
 </html>
