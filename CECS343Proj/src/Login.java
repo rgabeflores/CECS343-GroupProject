@@ -30,7 +30,11 @@ public class Login extends HttpServlet{
 		String[] loginInfo = this.ensureLoginSuccess(username, password);
 		//redirect to home page, if login is successful
 		if(loginInfo!=null & loginInfo[0] !=null && loginInfo[1] !=null){
-			response.sendRedirect("hello.jsp");
+			UserDAO ud = new UserDAO();
+			User u=ud.retrieveUser(username, password);
+			request.setAttribute("User",u);
+			RequestDispatcher rd = request.getRequestDispatcher("hello.jsp");
+			rd.include(request, response);
 		}
 		//else, redirect back to login page and notify end user of invalid username/password combination
 		else{
