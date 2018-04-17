@@ -27,7 +27,9 @@ public class User {
 	
 	
 	public void setUserValues(String userN, String pass, String emailAddr) {
-		
+		username = userN;
+		password = pass;
+		emailAddress = emailAddr;
 	}
 	
 	/**
