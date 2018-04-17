@@ -1,5 +1,5 @@
 package com.project;
-
+//
 public class Application {
 	private String appType;
 	private int number;
