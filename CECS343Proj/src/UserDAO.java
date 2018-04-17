@@ -23,19 +23,19 @@ public class UserDAO {
 	 * @param emailAddr
 	 * @return
 	 */
-	public User retrieveUser(String user, String pass, String emailAddr) {
+	public User retrieveUser(String user, String pass) {
 		Connection c = getConnection();
 		try {
 			User u = new User();
-			PreparedStatement daPrepState  = (PreparedStatement) c.prepareStatement("SELECT userName, password, emailAddress from user where userName = ? AND password = ? AND emailAddress = ?");
+			PreparedStatement daPrepState  = (PreparedStatement) c.prepareStatement("SELECT userName, password, emailAddress from user where userName = ? AND password = ?");
 			daPrepState.setString(1, user);
 			daPrepState.setString(2, pass);
-			daPrepState.setString(3, emailAddr);
 			ResultSet rs = daPrepState.executeQuery();
 			while(rs.next()) {
 				String userEntry = rs.getString(1);
 				String passwordEnt = rs.getString(2);		
-				u.setUserValues(userEntry, passwordEnt, emailAddr);
+				String emailEntry = rs.getString(3);
+				u.setUserValues(userEntry, passwordEnt, emailEntry);
 				return u;
 			}
 		}
