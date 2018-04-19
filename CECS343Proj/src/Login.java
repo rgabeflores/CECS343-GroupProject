@@ -13,7 +13,6 @@ public class Login extends HttpServlet{
 	 */
 	public Login() {
 		super();
-
 	}
 	
 	/**
@@ -44,9 +43,7 @@ public class Login extends HttpServlet{
 		}
 	}		
 	
-	protected void doPost(HttpServlet request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+	protected void doPost(HttpServlet request, HttpServletResponse response) throws ServletException, IOException {	
 	}
 	
 	/*
@@ -83,7 +80,6 @@ public class Login extends HttpServlet{
 			return null;
 		}
 		
-
 	}
 	
 	
@@ -111,8 +107,13 @@ public class Login extends HttpServlet{
 		return connection;
 	}
 	
-	
-	
-	
+	public void closeConnection(Connection conn) {
+		try {
+			conn.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }
