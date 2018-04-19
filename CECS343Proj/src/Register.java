@@ -219,5 +219,14 @@ public class Register extends HttpServlet {
 		
 		return connection;
 	}
+	
+	public void closeConnection(Connection conn) {
+		try {
+			conn.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
 
