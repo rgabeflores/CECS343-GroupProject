@@ -17,13 +17,13 @@ button {
     background-color: #4CAF50;
     color: black;
     padding: 14px 20px;
-    margin: 10px 0;
+    margin: auto;
     border: 2;
     cursor: pointer;
-    width: 80%; }
+    width: 60%; }
 /* Full-width input fields */
 input[type=text], input[type=password] {
-    width: 70%;
+    width: 50%;
     padding: 12px 25px;
     margin: 8px 0;
     display: inline-block;
@@ -40,6 +40,7 @@ img.avatar {
 <%
 %>
 <form action = "Login" method = "get"> 
+<div align = "center">
 	<div style="color:red">${errorMessage}</div>	
     <div class="imgcontainer">
       <img src="avatar.png" alt="Avatar" class="avatar">
@@ -51,12 +52,13 @@ img.avatar {
     </div>
       <td> </td>
      <div></div>
-      <label for="password"><b>Password :   </b></label>
+      <label for="password"><b>Password :</b></label>
       <input type="password" placeholder="Enter Password" name="password" required>
-    </div>
+
     <div>
       <button type="submit"> Log In</button>
 	</div>
+</div>
 </form>
 
 </body>
