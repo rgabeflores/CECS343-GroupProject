@@ -4,3 +4,5 @@ Updating Files to GitHub:
 	3. git push
 Updating Files on Your Computer:
 	1. git pull
+Checking for Changes:
+	1. git status
