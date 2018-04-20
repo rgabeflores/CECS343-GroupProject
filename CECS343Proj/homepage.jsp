@@ -37,9 +37,13 @@ input[type=search] {
 
 <div class="topnav" align = "center">
 	<input type="search" placeholder="Search..">
-  <button class="active" href="#login">Log In</button>
-  <button class= "active" href="#register">Register</button>
+  <a href="login.jsp">
+    <button>Login</button>
+  </a>
+  <a href="register.jsp">
+    <button>Register</button>
 </div>
+
 
 </body>
 </html>
