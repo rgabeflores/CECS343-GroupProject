@@ -1,15 +1,19 @@
 package com.project;
 import java.sql.Connection;
+
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
 
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import com.mysql.jdbc.PreparedStatement;
 
 
-public class RestaurantDAO {
+public class RestaurantDAO extends HttpServlet{
 	
 	public static void main(String []args) {
 		Scanner scan = new Scanner(System.in);
@@ -22,8 +26,23 @@ public class RestaurantDAO {
 	}
 	
 	public RestaurantDAO() {
-		
+		super();
 	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException{
+		String restaurantName = ((ServletRequest) request).getParameter("keyword").toString();
+		
+		ArrayList listOfRestaurants = this.searchRestaurant(restaurantName);
+		
+		
+		response.setContentType("text/html");
+		System.out.println(listOfRestaurants);
+		
+		request.setAttribute("restaurantResults", listOfRestaurants);
+		RequestDispatcher reqDispatcher = request.getRequestDispatcher("searchresults.jsp");
+		reqDispatcher.forward(request, response);
+	}
+	
 	
 	//This method searches the designated restaurant name in the database and gives back results of that particular restaurant name
 	public ArrayList<Restaurant> searchRestaurant(String restaurantName) {
