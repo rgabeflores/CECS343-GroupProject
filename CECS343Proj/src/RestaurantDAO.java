@@ -29,6 +29,9 @@ public class RestaurantDAO extends HttpServlet{
 		super();
 	}
 	
+	/**
+	 * This method processes the search results from the search bar to obtain restaurant results from the database
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException{
 		String restaurantName = ((ServletRequest) request).getParameter("keyword").toString();
 		
