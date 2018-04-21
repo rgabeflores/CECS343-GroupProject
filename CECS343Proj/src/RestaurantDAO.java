@@ -148,8 +148,36 @@ public class RestaurantDAO extends HttpServlet{
 	}
 	
 	
-	public Review<> retrieveReviewHistory(){
-		
+	/**
+	 * This method retrieves the reviews of a particular restaurant
+	 * @return
+	 */
+	public ArrayList<Review> retrieveReviews(int restaurantID){
+		try {
+			ArrayList<Review> restaurantReviews = new ArrayList<Review>();
+			Connection c = getConnection();
+			PreparedStatement ptsmt = (PreparedStatement)c.prepareStatement("SELECT * from review where restaurantID =?");
+			ptsmt.setInt(1,restaurantID);
+			ResultSet rs = ptsmt.executeQuery();
+			
+			while(rs.next()) {
+				int restID = rs.getInt("restaurantID");
+				int reviewNum = rs.getInt("reviewNumber");
+				int starsRating = rs.getInt("starRating");
+				String comment = rs.getString("reviewContent");
+				Review rev = new Review(restID, reviewNum);
+				rev.setReviewNumber(reviewNum);
+				rev.setStarsGiven(starsRating);
+				rev.setReviewContent(comment);
+				
+				restaurantReviews.add(rev);
+			}
+			return restaurantReviews;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	
