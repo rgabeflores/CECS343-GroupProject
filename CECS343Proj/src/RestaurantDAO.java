@@ -44,6 +44,29 @@ public class RestaurantDAO extends HttpServlet{
 	}
 	
 	
+	/**
+	 * This method is called once a button pertaining to a restaurant is clicked, and the user will
+	 * be redirected to the restaurant's page
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String id= ((ServletRequest)request).getParameter("restaurantID").toString();
+		int restID = Integer.parseInt(id);
+		String restName = ((ServletRequest)request).getParameter("restaurantName").toString();
+		String restAddress = ((ServletRequest)request).getParameter("restaurantAddress").toString();
+		String restType = ((ServletRequest)request).getParameter("restaurantType").toString();
+		
+		Restaurant aRestaurant = new Restaurant();
+		aRestaurant.setRestaurantID(restID);
+		aRestaurant.setRestaurantName(restName);
+		aRestaurant.setRestaurantType(restType);
+		
+		request.setAttribute("chosenRestaurant", aRestaurant);
+		RequestDispatcher reqDispatcher = request.getRequestDispatcher("restaurant.jsp");
+		reqDispatcher.forward(request, response);
+		
+	}
+	
+	
 	//This method searches the designated restaurant name in the database and gives back results of that particular restaurant name
 	public ArrayList<Restaurant> searchRestaurant(String restaurantName) {
 		ArrayList<Restaurant> searchResults = new ArrayList<Restaurant>();
