@@ -14,30 +14,22 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <title> Welcome ^.^</title>
 </head>
 <style>
-/* Set a style for all buttons */
-button {
-    background-color: #0099ff;
-    color: white;
-    padding: 5px 10px;
-    margin: auto;
-    border: 2;
-    cursor: pointer;
-    width: 10%; }
-input[type=search] {
-    width: 50%;
-    padding: 12px 25px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 4px solid #ccc;
-    box-sizing: border-box; }
 </style>
 <body>
 
+<div class="w3-bar w3-teal">
+  <a href="register.jsp" class="w3-bar-item w3-button">Home</a>
+  <a href="#" class="w3-bar-item w3-button">Link 1</a>
+  <a href="#" class="w3-bar-item w3-button">Link 2</a>
+  <a href="#" class="w3-bar-item w3-button">Link 3</a>
+</div>
+    
 <div class="topnav" align = "center">
-
  <form action = "Search" method = "get">
     <button type = "submit">Search</button>	
  	<input name = "keywords" type="search" placeholder="Search..">
