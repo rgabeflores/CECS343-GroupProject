@@ -13,7 +13,29 @@
 <title>Login</title>
 </head>
 <style>/* Set a style for all buttons */
-
+button {
+    background-color: #4CAF50;
+    color: black;
+    padding: 14px 20px;
+    margin: 10px 0;
+    border: 2;
+    cursor: pointer;
+    width: 80%; }
+       
+/* Full-width input fields */
+input[type=text], input[type=password] {
+    width: 70%;
+    padding: 12px 25px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 4px solid #ccc;
+    box-sizing: border-box; }
+.imgcontainer {
+    text-align:center;
+    position: relative; }
+img.avatar {
+    width: 20%;
+	border-radius: 20%; } 
 </style>
 <body>
 <%
