@@ -120,6 +120,27 @@ public class Review {
 		
 	}
 	
+	/**
+	 * This method counts the number of likes and dislikes a review has received
+	 * @return
+	 */
+	public int[] countLikesAndDislikes() {
+		int likesCount=0;
+		int dislikesCount=0;
+		for(Map.Entry<String, Boolean> entry : likesDislikes.entrySet()) {
+			if(entry.getValue()==true) {
+				likesCount++;
+			}
+			else {
+				dislikesCount++;
+			}
+		}
+		int[] stats = new int[2];
+		stats[0] = likesCount;
+		stats[1] = dislikesCount;
+		return stats;
+	}
+	
 	public Connection getConnection() {
 		String connectionUrl = "jdbc:mysql://localhost/muneerfirsttable";
 		Connection connection = null;
