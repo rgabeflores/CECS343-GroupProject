@@ -2,8 +2,8 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="com.project.Restaurant"  %>
 <%@ page import="com.project.RestaurantDAO"  %>
-<%@ page import="com.project.Review"  %>
 <%@ page import="com.project.BusinessInfo"  %>
+<%@ page import="com.project.Review"  %>
 <%@ page import="java.util.*"  %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -20,6 +20,12 @@
 </style>
 
 <body>
+	<div class="w3-bar w3-teal">
+  		<a href="register.jsp" class="w3-bar-item w3-button">Home</a>
+  		<a href="#" class="w3-bar-item w3-button">Link 1</a>
+  		<a href="#" class="w3-bar-item w3-button">Link 2</a>
+  		<a href="#" class="w3-bar-item w3-button">Link 3</a>
+		</div>
 
 	<form action = "Search" method = "get">
     	<button type = "submit">Search</button>	
@@ -33,10 +39,11 @@
 	Restaurant selectedRestaurant = (Restaurant) request.getAttribute("chosenRestaurant");
 	ArrayList<Review> reviews = rd.retrieveReviews(selectedRestaurant.getRestaurantID());
 	
-	out.println(selectedRestaurant.getRestaurantID() + " " + selectedRestaurant.getRestaurantName());
+	out.println(selectedRestaurant.getRestaurantBusinessInfo().showBusinessHours() + " " + selectedRestaurant.getRestaurantName());
 	%>
 	</p>
-
+	
+	<div class ="col" align = "left">
 		<table>
 		<% for(Review r:reviews){
 				int stars = r.getStarsGiven();
@@ -59,20 +66,36 @@
 			<%
 				}
 	
-			%>
-				</td>
+			%>	</td>
+			</tr>
+			
+			<tr>
 				<td><%=r.getReviewNumber() %></td>
 				<td> <%=r.getComment() %></td>
 				<td> <%=stats[0]%></td>
 				<td> <%=stats[1] %></td>
-				<td><%=stars %> </td>
-				
 			</tr>
-		</table>
 	<% 	
 	    }
-	
 	%>
-
+	</table>
+	</div>
+	
+	
+	<div class ="col" align = "right">
+		<%
+		BusinessInfo bi = selectedRestaurant.getRestaurantBusinessInfo();
+		for(Map.Entry<String, String> mp : bi.getHours().entrySet()){
+		%>
+			<tr>
+				<td><%=mp.getKey() %> </td>
+				<td><%=mp.getValue() %> </td>
+			</tr>
+		<%	
+		}		
+		%>
+	
+	</div>
+	
 </body>
 </html>
