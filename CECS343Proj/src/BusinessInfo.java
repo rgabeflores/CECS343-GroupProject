@@ -10,6 +10,10 @@ public class BusinessInfo {
 		hoursOfOperation = new LinkedHashMap<String, String>();
 	}
 	
+	public LinkedHashMap<String, String> getHours(){
+		return hoursOfOperation;
+	}
+	
 	/**
 	 * This method adds the hours of operation for a particular restaurant
 	 * @param businessHours
@@ -25,14 +29,14 @@ public class BusinessInfo {
 	/**
 	 * This method displays the business hours of operation for the restaurant
 	 */
-	public void showBusinessHours() {
+	public String showBusinessHours() {
 		StringBuilder hoursDisplay = new StringBuilder();
 		for(Map.Entry<String, String> me : hoursOfOperation.entrySet()) {
 			hoursDisplay.append(me.getKey() + " " + me.getValue() + " a ");
 		}
-		System.out.println(hoursDisplay.toString());
+		return hoursDisplay.toString();
 	}
-	
+
 	
 	
 	
