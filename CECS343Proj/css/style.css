@@ -1,3 +1,18 @@
+p.normal{
+	font-family: "Arial";
+	font-size: 20px;
+	color : #00ff00;
+
+}
+
+/* Create two equal columns that floats next to each other */
+.col {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: 300px; /* Should be removed. Only for demonstration */
+}
+
 /* Set a style for all buttons */
 button {
     background-color: #0099ff;
@@ -29,3 +44,28 @@ input[type=text], input[type=password] {
 img.avatar {
     width: 20%;
 	border-radius: 20%; } 
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+
+.topnavigator{
+	overflow:hidden;
+	background-color:#555;	
+	
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.checked {
+    color: orange;
+}
