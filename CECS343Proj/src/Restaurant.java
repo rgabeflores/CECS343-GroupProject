@@ -10,11 +10,12 @@ public class Restaurant {
 	private String restaurantAddress;
 	private String restaurantType;
 	private ArrayList<Review> restaurantReviewList;
-	private BusinessInfo hoursOfOpen;
+	private BusinessInfo hoursOpen;
+	
 	
 	//Default constructor
 	public Restaurant() {
-		
+			
 	}
 	//Overloaded constructor with one parameter : restaurantName
 	public Restaurant(String restName) {
@@ -58,6 +59,14 @@ public class Restaurant {
 		return restaurantType;
 	}
 	
+	/**
+	 * Setter for the restaurant's name
+	 * @param name
+	 */
+	public BusinessInfo getRestaurantBusinessInfo() {
+		return hoursOpen;
+	}
+	
 	
 	/**
 	 * Setter for the restaurant's ID
@@ -91,6 +100,10 @@ public class Restaurant {
 		restaurantType = type;
 	}
 	
+	public void setRestaurantBusinessInfo(BusinessInfo bi) {
+		hoursOpen = bi;
+	}
+	
 	public String toString() {
 		return restaurantAddress + " " + restaurantType;
 	}
@@ -98,7 +111,7 @@ public class Restaurant {
 	/**
 	 * This method calculates the average rating of the restaurant based off user ratings
 	 * @return average
-	 */ 
+	 */
 	public double calculateAverageRating() {
 		int summation=0;
 		for(Review r : restaurantReviewList) {
@@ -108,10 +121,36 @@ public class Restaurant {
 		return average;
 		
 	}
+	
+//	public double calcAverageRating() {
+//		Connection c = getConnection();
+//		try {	
+//			PreparedStatement statement = (PreparedStatement) c.prepareStatement("SELECT AVG(starsGiven) from restaurant INNER JOIN review on restaurant.restaurantID = review.restaurantID where restaurantID = ?");
+//			statement.setInt(1, this.restaurantID);
+//			ResultSet rs = statement.executeQuery();
+//			if(rs==null) {
+//				
+//			}
+//			else {
+//				while(rs.next()) {
+//					double avg = 
+//				}
+//				
+//			}
+//		
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}
+		
+	}
+	
+	
+	
+	
 //	
 //	public void viewRestaurantHours() {
 //		hoursOfOperation.viewBusinessHours();
 //	}
 	
 	
-}
+
