@@ -32,14 +32,15 @@ public class Register extends HttpServlet {
 		
 		//if username entry was successful, proceed to validating password 
 		if(userSuccess){
-			//if password entry was successfull, proceed validating email address
+			//if password entry was successful, proceed validating email address
 			if(passwordSuccess){
 				//if email address entry was successful, create the account and it to the database
 				if(emailSuccess){
 					out.print("Account has been successfully made");
 					UserDAO ud = new UserDAO();
 					ud.insertNewUser(username, password, emailAddress);
-					response.sendRedirect("hello.jsp");
+					RequestDispatcher disp = request.getRequestDispatcher("/home.jsp");
+					disp.forward(request,  response);
 				}
 				//else, email address entered is taken or is in an incorrect format
 				else{
@@ -88,6 +89,7 @@ public class Register extends HttpServlet {
 		}
 		return false;
 	}
+	
 	
 	/*
 	 * This method validates if the format of the entered email address actually matches the criteria
@@ -144,7 +146,7 @@ public class Register extends HttpServlet {
 					}
 					else {
 						domain.append(emailAddress.charAt(j));
-					}	
+					}
 				}
 			}
 			//if the email address domain is empty or there isn't an at sign, then it is invalid
@@ -162,6 +164,11 @@ public class Register extends HttpServlet {
 		}
 		return false;
 	}
+	
+//	public boolean validateEmailAddress2() {
+//		
+//	}
+	
 	
 	/*
 	 *This method determines whether a user's password is strong (at least 1 character should be uppercase
@@ -218,15 +225,6 @@ public class Register extends HttpServlet {
 		}
 		
 		return connection;
-	}
-	
-	public void closeConnection(Connection conn) {
-		try {
-			conn.close();
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
 	}
 }
 
