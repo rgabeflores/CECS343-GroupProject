@@ -11,13 +11,13 @@ import com.mysql.jdbc.PreparedStatement;
 public class Review {
 	
 	private int reviewNumber;
-	private int starsGiven; //the rating number between 1-5 given by the author of the review
-	private String comment; //the actual content of the review
-	private HashMap<String, Boolean> likesDislikes; //keeps track of who liked and disliked the review
+	private int starsGiven;
+	private String comment;
+	private HashMap<String, Boolean> likesDislikes;
 	
 	
-	//Overloaded constructor for a review object, used when retrieving reviews of restaurants from database
-	public Review(int restaurID, int reviewNum) {
+	//Default constructor for a review object
+	public Review(int restaurID, int revNum) {
 		likesDislikes = new HashMap<String, Boolean>();
 		try {
 			Connection c = getConnection();
@@ -26,22 +26,32 @@ public class Review {
 			statement.setInt(1,restaurID);
 			statement.setInt(2,revNum);
 			ResultSet rs = statement.executeQuery();
-			//retrieves review stats such as likes and dislikes
+			reviewNumber = revNum;
 			while(rs.next()) {
 				String firstEntry = rs.getString("thumbedBy");
 				boolean secondEntry = rs.getBoolean("likeOrDislike");
-				likesDislikes.put(firstEntry,secondEntry );
-				reviewNumber = revNum;
+			
+				likesDislikes.put(firstEntry, secondEntry );
+				
 				starsGiven = rs.getInt("starRating");
 				comment = rs.getString("reviewContent");
 			}
-			
-			
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
 		
+	}
+	public void setReviewNumber(int num) {
+		reviewNumber = num;
+	}
+	
+	public void setStarsGiven(int stars) {
+		starsGiven = stars;
+	}
+	
+	public void setReviewContent(String content) {
+		comment = content;
 	}
 	
 	public int getReviewNumber() {
@@ -58,42 +68,74 @@ public class Review {
 	
 	
 	//This method updates a review's amount of likes or dislikes by adding a like or dislike to the review
-	public boolean updateLikeOrDislike(User u, boolean decision, Restaurant r) {
+	public boolean updateLikeOrDislike(String name, boolean decision, int restaurantID) {
 		
-		//if the rating list contains a user that has previously rated a certain review
-		//then deny permission to add a rating once again
-		if(likesDislikes.containsKey(u)) {
-			return false;
+		//if the rating list contains a user that has previously liked or disliked a certain review
+		//then..
+		if(likesDislikes.containsKey(name)){
+			//if the recent decision to either like or dislike matches the user's previous decision, then deny permission
+			if(likesDislikes.get(name)==decision) {
+				return false;
+			}
+			else {
+				boolean active;
+				//if the user has a previous like, then change it to a dislike
+				if(likesDislikes.get(name)==true) {
+					active = false;
+					likesDislikes.put(name, false);
+				}
+				//if the user has a previous dislike, then change it to a like
+				else {
+					active = true;
+					likesDislikes.put(name, true);
+				}
+				try {
+					Connection c = getConnection();
+					PreparedStatement ptsmt = (PreparedStatement) c.prepareStatement("UPDATE review_stats set likeOrDislike = ? where thumbedBy = ? AND restaurantID = ? AND reviewNumber = ?");
+					ptsmt.setBoolean(1, active);
+					ptsmt.setString(2, name);
+					ptsmt.setInt(3,  restaurantID);
+					ptsmt.setInt(4, this.reviewNumber);
+					ptsmt.executeUpdate();
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}	
+			}
 		}
-		//else add a like or dislike to the review based on the user's decision
-		likesDislikes.put(u.getUsername(), decision);
-		
-		try {
-			Connection c = getConnection();
-			PreparedStatement statement  = (PreparedStatement) c.prepareStatement("insert into review_stats(restaurantID, reviewNumber,thumbedBy, likeOrDislike) VALUES(?,?,?,?)");
-			statement.setInt(1, r.getRestaurantID());
-			statement.setInt(2, this.getReviewNumber());
-			statement.setString(3, u.getUsername());
-			statement.setBoolean(4,decision);
-			statement.executeUpdate();
+		else {
+			//else add a like or dislike to the review based on the user's decision
+			likesDislikes.put(name, decision);
+			//and update the review stats (likes and dislikes) in the database
+			try {
+				Connection c = getConnection();
+				System.out.println(restaurantID + "    " + this.getReviewNumber());
+				PreparedStatement statement  = (PreparedStatement) c.prepareStatement("insert into review_stats(restaurantID, reviewNumber,thumbedBy, likeOrDislike) VALUES(?,?,?,?)");
+				statement.setInt(1, restaurantID);
+				statement.setInt(2, this.getReviewNumber());
+				statement.setString(3, name);
+				statement.setBoolean(4,decision);
+				statement.executeUpdate();
 			
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
 			
-		}catch(Exception e) {
-			e.printStackTrace();
+			return true;
 		}
-		
-		return true;
+		return false;
 		
 	}
 	
 	//This method removes the user's decision of either liking or disliking a review
-	public boolean removeLikeOrDislike(User u, Restaurant r) {
+	public boolean removeLikeOrDislike(String userName, Restaurant r) {
 		try {
 			Connection c = getConnection();
 			PreparedStatement statement = (PreparedStatement) c.prepareStatement("SELECT * from review_stats where restaurantID = ? AND reviewNumber = ? AND thumbedBy = ?");
 		    statement.setInt(1, r.getRestaurantID());
-			statement.setString(2,this.reviewNumber);
-			statement.setString(3, u.getUsername());
+			statement.setInt(2,reviewNumber);
+			statement.setString(3, userName);
+			
 			
 			//remove the user from the likesDislikes hashmap
 			likesDislikes.remove(userName);
@@ -108,14 +150,13 @@ public class Review {
 				PreparedStatement statement2 = (PreparedStatement) c.prepareStatement("delete from review_stats where restaurantID = ? AND reviewNumber = ? AND thumbedBy = ?");
 				statement2.setInt(1,r.getRestaurantID());
 				statement2.setInt(2,this.reviewNumber);
-				statement2.setString(3, u.getUsername());
+				statement2.setString(3,userName);
 				statement2.executeUpdate();
 			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		
 		return true;
 		
 	}
@@ -141,6 +182,7 @@ public class Review {
 		return stats;
 	}
 	
+	
 	public Connection getConnection() {
 		String connectionUrl = "jdbc:mysql://localhost/muneerfirsttable";
 		Connection connection = null;
@@ -165,15 +207,9 @@ public class Review {
 		return connection;
 	}
 	
-	public void closeConnection(Connection conn) {
-		try {
-			conn.close();
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
+	public String toString() {
+		return comment + " wehee " + starsGiven + " fsdf " + reviewNumber;
 	}
-	
 	
 	
 }
