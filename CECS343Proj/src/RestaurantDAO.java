@@ -13,7 +13,10 @@ import javax.servlet.http.*;
 import com.mysql.jdbc.PreparedStatement;
 
 
+
 public class RestaurantDAO extends HttpServlet{
+	
+	
 	
 	public static void main(String []args) {
 		Scanner scan = new Scanner(System.in);
@@ -30,7 +33,93 @@ public class RestaurantDAO extends HttpServlet{
 	}
 	
 	/**
-	 * This method processes the search results from the search bar to obtain restaurant results from the database
+	 * This method is called once a button pertaining to a restaurant is clicked or if a user likes or dislikes a
+	 * review found on the restaurant's page
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//if parameter contains Click, then this indicates a redirecting to the restaurant page
+		if(request.getParameter("Click") !=null) {
+			String id= ((ServletRequest)request).getParameter("restaurantID").toString();
+			int restID = Integer.parseInt(id);
+			String restName = ((ServletRequest)request).getParameter("restaurantName").toString();
+			String restAddress = ((ServletRequest)request).getParameter("restaurantAddress").toString();
+			String restType = ((ServletRequest)request).getParameter("restaurantType").toString();
+			
+			
+			Restaurant aRestaurant = new Restaurant();
+			aRestaurant.setRestaurantID(restID);
+			aRestaurant.setRestaurantName(restName);
+			aRestaurant.setRestaurantType(restType);
+			BusinessInfo busInfo = this.retrieveRestaurantInfo(restID);
+			aRestaurant.setRestaurantBusinessInfo(busInfo);
+			
+			request.setAttribute("chosenRestaurant", aRestaurant);
+			RequestDispatcher reqDispatcher = request.getRequestDispatcher("restaurant.jsp");
+			reqDispatcher.forward(request, response);
+		}
+		//else, if the review number is entered, then update the review's stats by issuing either a like or dislike for that user
+		else if(request.getParameter("Like") !=null) {
+			String revNum= ((ServletRequest)request).getParameter("reviewNumber").toString();
+			String restID = ((ServletRequest)request).getParameter("restaurID").toString();
+			int revNumber = Integer.parseInt(revNum);
+			int restaurID = Integer.parseInt(restID);
+			
+			
+			Review r = new Review(restaurID, revNumber);
+			String restName = ((ServletRequest)request).getParameter("restaurantName").toString();
+			String restAddress = ((ServletRequest)request).getParameter("restaurantAddress").toString();
+			String restType = ((ServletRequest)request).getParameter("restaurantType").toString();
+			
+			
+			System.out.println(restaurID + "  wth  " + revNumber +  " wth2 " + r.getReviewNumber());
+			r.updateLikeOrDislike("UncleJack",true, restaurID);
+
+			
+			Restaurant aRestaurant = new Restaurant();
+			aRestaurant.setRestaurantID(restaurID);
+			aRestaurant.setRestaurantName(restName);
+			aRestaurant.setRestaurantType(restType);
+			BusinessInfo busInfo = this.retrieveRestaurantInfo(restaurID);
+			aRestaurant.setRestaurantBusinessInfo(busInfo);
+			
+			request.setAttribute("chosenRestaurant", aRestaurant);
+			RequestDispatcher reqDispatcher = request.getRequestDispatcher("restaurant.jsp");
+			reqDispatcher.forward(request, response);
+			
+		}
+		else if(request.getParameter("Dislike")!=null) {
+			String revNum= ((ServletRequest)request).getParameter("reviewNumber").toString();
+			String restID = ((ServletRequest)request).getParameter("restaurID").toString();
+			int revNumber = Integer.parseInt(revNum);
+			int restaurID = Integer.parseInt(restID);
+			
+			
+			Review r = new Review(restaurID, revNumber);
+			String restName = ((ServletRequest)request).getParameter("restaurantName").toString();
+			String restAddress = ((ServletRequest)request).getParameter("restaurantAddress").toString();
+			String restType = ((ServletRequest)request).getParameter("restaurantType").toString();
+			
+			r.updateLikeOrDislike("UncleJack",false, restaurID);
+
+			
+			Restaurant aRestaurant = new Restaurant();
+			aRestaurant.setRestaurantID(restaurID);
+			aRestaurant.setRestaurantName(restName);
+			aRestaurant.setRestaurantType(restType);
+			BusinessInfo busInfo = this.retrieveRestaurantInfo(restaurID);
+			aRestaurant.setRestaurantBusinessInfo(busInfo);
+			
+			request.setAttribute("chosenRestaurant", aRestaurant);
+			RequestDispatcher reqDispatcher = request.getRequestDispatcher("restaurant.jsp");
+			reqDispatcher.forward(request, response);
+		}
+	
+	}
+	
+
+	
+	/**
+	 * This method processes the search results from the search bar to obtain restaurant results from theh database
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException{
 		String restaurantName = ((ServletRequest) request).getParameter("keyword").toString();
@@ -42,36 +131,14 @@ public class RestaurantDAO extends HttpServlet{
 		System.out.println(listOfRestaurants);
 		
 		request.setAttribute("restaurantResults", listOfRestaurants);
-		RequestDispatcher reqDispatcher = request.getRequestDispatcher("searchresults.jsp");
+		RequestDispatcher reqDispatcher = request.getRequestDispatcher("/searchresults.jsp");
 		reqDispatcher.forward(request, response);
 	}
 	
-	
-	/**
-	 * This method is called once a button pertaining to a restaurant is clicked, and the user will
-	 * be redirected to the restaurant's page
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id= ((ServletRequest)request).getParameter("restaurantID").toString();
-		int restID = Integer.parseInt(id);
-		String restName = ((ServletRequest)request).getParameter("restaurantName").toString();
-		String restAddress = ((ServletRequest)request).getParameter("restaurantAddress").toString();
-		String restType = ((ServletRequest)request).getParameter("restaurantType").toString();
-		
-		Restaurant aRestaurant = new Restaurant();
-		aRestaurant.setRestaurantID(restID);
-		aRestaurant.setRestaurantName(restName);
-		aRestaurant.setRestaurantType(restType);
-		
-		request.setAttribute("chosenRestaurant", aRestaurant);
-		RequestDispatcher reqDispatcher = request.getRequestDispatcher("restaurant.jsp");
-		reqDispatcher.forward(request, response);
-		
-	}
-	
-	
+
 	//This method searches the designated restaurant name in the database and gives back results of that particular restaurant name
 	public ArrayList<Restaurant> searchRestaurant(String restaurantName) {
+		
 		ArrayList<Restaurant> searchResults = new ArrayList<Restaurant>();
 		Connection c= getConnection();
 		try {
@@ -90,6 +157,8 @@ public class RestaurantDAO extends HttpServlet{
 					String restAddr = rs.getString("restaurantAddress");
 					String restType = rs.getString("restaurantType");
 					String restName = rs.getString("restaurantName");
+					
+					
 					r.setRestaurantID(restID);
 					r.setRestaurantName(restName);
 					r.setRestaurantAddress(restAddr);
@@ -98,6 +167,7 @@ public class RestaurantDAO extends HttpServlet{
 					
 				}
 			}
+			System.out.println("SWEET");
 			return searchResults;
 			
 		}
@@ -105,6 +175,8 @@ public class RestaurantDAO extends HttpServlet{
 			e.printStackTrace();
 		}
 		return null;
+	
+	
 	}
 	
 	/**
@@ -137,11 +209,13 @@ public class RestaurantDAO extends HttpServlet{
 				dailyHours.add(fridayHours);
 				dailyHours.add(saturdayHours);
 				
+				
 				BusinessInfo busInfo = new BusinessInfo();
 				busInfo.addBusinessInfo(dailyHours);
 				busInfo.showBusinessHours();
 				
-				return busInfo;	
+				return busInfo;
+				
 			}
 		}
 		catch(Exception e) {
@@ -149,7 +223,6 @@ public class RestaurantDAO extends HttpServlet{
 		}
 		return null;
 	}
-	
 	
 	/**
 	 * This method retrieves the reviews of a particular restaurant
@@ -184,7 +257,6 @@ public class RestaurantDAO extends HttpServlet{
 	}
 	
 	
-	
 	public Connection getConnection() {
 		String connectionUrl = "jdbc:mysql://localhost/muneerfirsttable";
 		Connection connection = null;
@@ -207,15 +279,6 @@ public class RestaurantDAO extends HttpServlet{
 		}
 		
 		return connection;
-	}
-	
-	public void closeConnection(Connection conn) {
-		try {
-			conn.close();
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 }
