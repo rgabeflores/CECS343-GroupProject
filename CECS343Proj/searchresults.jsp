@@ -47,7 +47,8 @@
 					<div class = "col" align ="center">
 						<p class = "normal">
 							<td> <%= r.getRestaurantName() %> </td>
-						</p>			
+						</p>
+						
 						<form action = "Search" method = "POST">
 							<input type = "hidden" name = "restaurantID" value=<%=r.getRestaurantID() %> />
 							<input type = "hidden" name = "restaurantName" value = <%= r.getRestaurantName() %> />
@@ -55,16 +56,20 @@
 							<input type = "hidden" name = "restaurantType" value = <%= r.getRestaurantType() %> />
 	                		<input type="submit" name="Click" value="Click" >
             			</form>
-					</div>	
+					</div>
+					
 					<div class ="col">
 						<p class = "normal">
 							<td> <%=r.getRestaurantAddress() %></td>
-						</p>	
+						</p>
+						
 					</div>
+					
 				</div>
 			<%}%>
 			</div>
 	<%}
 	%>
+	
 </body>
 </html>
