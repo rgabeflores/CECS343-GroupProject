@@ -6,13 +6,14 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import com.mysql.jdbc.PreparedStatement;
 
-
 public class Login extends HttpServlet{
+	
 	/**
 	 * Default constructor for the Login servlet object
 	 */
 	public Login() {
 		super();
+
 	}
 	
 	/**
@@ -25,14 +26,17 @@ public class Login extends HttpServlet{
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		
+		
 		//checking and validating login credentials
 		String[] loginInfo = this.ensureLoginSuccess(username, password);
 		//redirect to home page, if login is successful
 		if(loginInfo!=null & loginInfo[0] !=null && loginInfo[1] !=null){
 			UserDAO ud = new UserDAO();
 			User u=ud.retrieveUser(username, password);
+			
 			request.setAttribute("User",u);
-			RequestDispatcher rd = request.getRequestDispatcher("hello.jsp");
+			
+			RequestDispatcher rd = request.getRequestDispatcher("home.jsp");
 			rd.include(request, response);
 		}
 		//else, redirect back to login page and notify end user of invalid username/password combination
@@ -43,7 +47,9 @@ public class Login extends HttpServlet{
 		}
 	}		
 	
-	protected void doPost(HttpServlet request, HttpServletResponse response) throws ServletException, IOException {	
+	protected void doPost(HttpServlet request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
 	}
 	
 	/*
@@ -70,9 +76,9 @@ public class Login extends HttpServlet{
 				String[] mp = new String[2];
 				mp[0] = rs.getString("userName");
 				mp[1] = rs.getString("password");
-				return mp;
+				
+				return mp;	
 			}
-			
 		}
 		
 		catch(Exception e) {
@@ -80,8 +86,8 @@ public class Login extends HttpServlet{
 			return null;
 		}
 		
+
 	}
-	
 	
 	public Connection getConnection() {
 		String connectionUrl = "jdbc:mysql://localhost/muneerfirsttable";
@@ -107,13 +113,8 @@ public class Login extends HttpServlet{
 		return connection;
 	}
 	
-	public void closeConnection(Connection conn) {
-		try {
-			conn.close();
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
+	
+	
+	
 	
 }
