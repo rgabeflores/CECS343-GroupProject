@@ -19,6 +19,10 @@ public class User {
 		System.out.println();
 	}
 	
+	public User(String name) {
+		username = name;
+	}
+	
 	public User(String userN, String pass, String emailAddr) {
 		username = userN;
 		password = pass;
