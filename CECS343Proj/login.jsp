@@ -10,6 +10,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/style.css" type="text/css" />
 <title>Login</title>
 </head>
 <style>/* Set a style for all buttons */
@@ -30,36 +32,29 @@ input[type=text], input[type=password] {
     display: inline-block;
     border: 4px solid #ccc;
     box-sizing: border-box; }
-.imgcontainer {
-    text-align:center;
-    position: relative; }
-img.avatar {
-    width: 20%;
-	border-radius: 20%; } 
+
 </style>
 <body>
 <%
 %>
 <form action = "Login" method = "get"> 
-<div align = "center">
-	<div style="color:red">${errorMessage}</div>	
+	
     <div class="imgcontainer">
       <img src="avatar.png" alt="Avatar" class="avatar">
     </div>
-	
+	<div style="color:red">${errorMessage}</div>	
     <div class="container">
       <label for="username"><b>UserName :</b></label>
       <input type="text" placeholder="Enter Username" name="username" required>
     </div>
       <td> </td>
-     <div></div>
-      <label for="password"><b>Password :</b></label>
+     <div>
+      <label for="password"><b>Password :   </b></label>
       <input type="password" placeholder="Enter Password" name="password" required>
-
+    </div>
     <div>
       <button type="submit"> Log In</button>
 	</div>
-</div>
 </form>
 
 </body>
