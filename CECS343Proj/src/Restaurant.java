@@ -121,36 +121,7 @@ public class Restaurant {
 		return average;
 		
 	}
-	
-//	public double calcAverageRating() {
-//		Connection c = getConnection();
-//		try {	
-//			PreparedStatement statement = (PreparedStatement) c.prepareStatement("SELECT AVG(starsGiven) from restaurant INNER JOIN review on restaurant.restaurantID = review.restaurantID where restaurantID = ?");
-//			statement.setInt(1, this.restaurantID);
-//			ResultSet rs = statement.executeQuery();
-//			if(rs==null) {
-//				
-//			}
-//			else {
-//				while(rs.next()) {
-//					double avg = 
-//				}
-//				
-//			}
-//		
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//		}
-		
-	}
-	
-	
-	
-	
-//	
-//	public void viewRestaurantHours() {
-//		hoursOfOperation.viewBusinessHours();
-//	}
+}
 	
 	
 
