@@ -39,7 +39,7 @@ public class Register extends HttpServlet {
 					out.print("Account has been successfully made");
 					UserDAO ud = new UserDAO();
 					ud.insertNewUser(username, password, emailAddress);
-					RequestDispatcher disp = request.getRequestDispatcher("/home.jsp");
+					RequestDispatcher disp = request.getRequestDispatcher("/homepage.jsp");
 					disp.forward(request,  response);
 				}
 				//else, email address entered is taken or is in an incorrect format
