@@ -1,4 +1,3 @@
-
 CREATE TABLE user(
 	userName VARCHAR(50) not null,
 	password VARCHAR(50) NOT NULL,
@@ -13,7 +12,7 @@ CREATE TABLE restaurant (
 	
 	restaurantName varchar(45) NOT NULL,
    
-	restaurantAddress varchar(45) not NULL,
+	restaurantAddress varchar(1000) not NULL,
    
 	restaurantType varchar(45) not NULL,
 
@@ -57,4 +56,4 @@ create table restaurant_hours(
 			primary key(restaurantID, reviewNumber, thumbedBy),
 			foreign key(thumbedBy) references user(userName),
 			foreign key(restaurantID, reviewNumber) references review(restaurantID, reviewNumber)
-	)
+);
